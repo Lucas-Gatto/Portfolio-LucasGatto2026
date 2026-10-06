@@ -383,7 +383,9 @@
                         <span
                             class="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-950 text-purple-400 border border-purple-800/60">3º
                             Semestre</span>
-                        <span class="text-xs text-slate-500 font-medium">Full-Stack MERN</span>
+                        <span class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online
+                        </span>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Portal Bruxa Acadêmica</h3>
                     <p class="text-slate-400 text-sm leading-relaxed mb-4">
@@ -405,6 +407,10 @@
                         rel="noopener noreferrer"
                         class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium transition">
                         GitHub
+                    </a>
+                    <a href="https://portal-bruxa-academica.vercel.app" target="_blank" rel="noopener noreferrer"
+                        class="py-2 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+                        Online
                     </a>
                 </div>
             </div>
@@ -715,6 +721,13 @@
         </div>
     </div>
 
+    <div id="image-lightbox" style="display: none;"
+        class="fixed inset-0 z-50 items-center justify-center bg-black/90 p-4 cursor-zoom-out backdrop-blur-sm"
+        onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Imagem ampliada"
+            class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl transition-transform duration-300">
+    </div>
+
     <script>
         const projectsDetails = {
             "aquamonitor": {
@@ -758,11 +771,13 @@
                 semester: "3º Semestre",
                 overview: "Portal de conteúdo e entretenimento desenvolvido para atender demanda de docente da instituição. Possui módulo de publicações, tiragem de tarô e numerologia.",
                 role: "Atuação Full-Stack de ponta a ponta: construção dos endpoints da API REST em Express/Mongo e implementação da interface interativa em React (Vite).",
-                techs: ["React (Vite)", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
+                techs: ["React (Vite)", "Node.js", "Express", "MongoDB", "CSS"],
                 githubUrl: "https://github.com/Lucas-Gatto/portal-bruxa-academica",
-                liveUrl: null,
+                liveUrl: "https://portal-bruxa-academica.vercel.app",
                 screenshots: [
-                    "https://images.unsplash.com/photo-1514537092928-83b6928e18f2?auto=format&fit=crop&w=800&q=80"
+                    "assets/prints/portal-bruxa.png",
+                    "assets/prints/portal-bruxa2.png",
+                    "assets/prints/portal-bruxa3.png"
                 ]
             },
             "agrostock": {
@@ -774,7 +789,8 @@
                 githubUrl: "https://github.com/LunaLeao/PI-2Semestre-AgroStock",
                 liveUrl: null,
                 screenshots: [
-                    "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=800&q=80"
+                    "assets/prints/agrostock.png",
+                    "assets/prints/agrostock2.png"
                 ]
             },
             "aquavolt": {
@@ -786,7 +802,7 @@
                 githubUrl: "https://github.com/ArtuTuin/ProjetoIntegrador-DW",
                 liveUrl: null,
                 screenshots: [
-                    "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=800&q=80"
+                    "assets/prints/aquavolt.png"
                 ]
             }
         };
@@ -808,7 +824,11 @@
             const screensContainer = document.getElementById("modal-screenshots");
             screensContainer.innerHTML = p.screenshots.map(url => `
         <div class="rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-          <img src="${url}" alt="Print do projeto ${p.title}" class="w-full h-44 object-cover hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Captura+de+Tela'"/>
+          <img src="${url}" 
+            alt="Print do projeto ${p.title}" 
+            onclick="openLightbox('${url}')"
+            class="w-full h-44 object-cover hover:scale-105 transition duration-300 cursor-zoom-in" 
+            onerror="this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Captura+de+Tela'"/>
         </div>
       `).join('');
 
@@ -831,6 +851,17 @@
             document.body.style.overflow = "auto";
         }
 
+        function openLightbox(imgSrc) {
+            const lightbox = document.getElementById("image-lightbox");
+            const img = document.getElementById("lightbox-img");
+            img.src = imgSrc;
+            lightbox.style.display = "flex";
+        }
+
+        function closeLightbox() {
+            document.getElementById("image-lightbox").style.display = "none";
+        }
+
         document.getElementById("close-modal-btn").onclick = closeModal;
 
         document.getElementById("project-modal").onclick = function (e) {
@@ -838,7 +869,10 @@
         };
 
         document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") closeModal();
+            if (e.key === "Escape") {
+                closeLightbox();
+                closeModal();
+            }
         });
 
         const menuBtn = document.getElementById('menu-btn');
